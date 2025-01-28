@@ -20,7 +20,7 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="700"/>
+                            <ColumnDefinition Width="640"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -30,9 +30,9 @@
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <Image Width="100" Grid.Column="0" Grid.RowSpan="4">
+                        <Image Width="100" Grid.Column="0" Grid.RowSpan="4" Margin="5">
                             <Image.Source>
-                                <Binding Path="ProductPhoto">
+                                <Binding Path="ProductPhotoPath">
                                     <Binding.TargetNullValue>
                                         <ImageSource>
                                             img/picture.png
@@ -43,7 +43,7 @@
                         </Image>
                         
                         <TextBlock Text="{Binding ProductName}"
-                                   FontSize="16" FontWeight="Bold"
+                                   FontSize="18" FontWeight="Bold"
                                    HorizontalAlignment="Left"
                                    Grid.Row="0" Grid.Column="1"
                                    Margin="5"/>

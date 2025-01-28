@@ -32,6 +32,19 @@ namespace Ignateva41Size
         public int ProductQuantityInStock { get; set; }
         public string ProductDescription { get; set; }
         public string ProductPhoto { get; set; }
+
+        public string ProductPhotoPath
+        {
+            get
+            {
+                if (ProductPhoto == null)
+                    return null;
+
+                else 
+                    return "products/" + ProductPhoto;
+            }
+        }
+
         public string ProductStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
