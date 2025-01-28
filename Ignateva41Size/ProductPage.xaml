@@ -11,10 +11,58 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ListView Name="ProductListView">
+        <WrapPanel Grid.Row="0" VerticalAlignment="Center">
+            <WrapPanel Margin="5" VerticalAlignment="Top" Width="130">
+                <TextBlock Text="кол-во "
+                       FontSize="16"/>
+
+                <TextBlock Name="RecordsShownText" FontSize="16"/>
+                <TextBlock Text=" из " FontSize="16"/>
+                <TextBlock Name="RecordsTotalText" FontSize="16"/>
+            </WrapPanel>
+
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="поиск по наименованию"
+                           FontSize="16"/>
+
+                <TextBox Name="TBoxSearch"
+                         FontSize="16" Width="200"
+                         TextChanged="TBoxSearch_TextChanged"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="5">
+                <RadioButton Content="по возрастанию стоимости"
+                             FontSize="16"
+                             Name="RButtonAsc"
+                             Checked="RButtonAsc_Checked"/>
+                
+                <RadioButton Content="по убыванию стоимости"
+                             FontSize="16"
+                             Name="RButtonDesc"
+                             Checked="RButtonDesc_Checked"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="5">
+                <TextBlock Text="фильтрация по скидке"
+                           FontSize="16"/>
+
+                <ComboBox Name="ComboDiscount"
+                          FontSize="16"
+                          SelectionChanged="ComboDiscount_SelectionChanged">
+                    <TextBlock>Все диапазоны</TextBlock>
+                    <TextBlock>0 - 9,99%</TextBlock>
+                    <TextBlock>10 - 14,99%</TextBlock>
+                    <TextBlock>15% и более</TextBlock>
+                </ComboBox>
+            </StackPanel>
+
+        </WrapPanel>
+
+        <ListView Name="ProductListView" Grid.Row="1">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>

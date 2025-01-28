@@ -26,6 +26,71 @@ namespace Ignateva41Size
 
             var currentProducts = Ignateva41Entities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProducts;
+
+            ComboDiscount.SelectedIndex = 0;
+            UpdateProducts();
+        }
+
+        private void UpdateProducts()
+        {
+            var currentProducts = Ignateva41Entities.GetContext().Product.ToList();
+
+            RecordsTotalText.Text= currentProducts.Count().ToString();
+
+            switch (ComboDiscount.SelectedIndex)
+            {
+                case 0:
+                    currentProducts = currentProducts.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 0 &&
+                    Convert.ToDouble(p.ProductDiscountAmount) <= 100)).ToList();
+                    break;
+
+                case 1:
+                    currentProducts = currentProducts.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 0 &&
+                    Convert.ToDouble(p.ProductDiscountAmount) <= 9.99)).ToList();
+                    break;
+
+                case 2:
+                    currentProducts = currentProducts.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 10 &&
+                    Convert.ToDouble(p.ProductDiscountAmount) <= 14.99)).ToList();
+                    break;
+
+                case 3:
+                    currentProducts = currentProducts.Where(p => (Convert.ToDouble(p.ProductDiscountAmount) >= 15 &&
+                    Convert.ToDouble(p.ProductDiscountAmount) <= 100)).ToList();
+                    break;
+            }
+
+            currentProducts = currentProducts.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+
+            if (RButtonAsc.IsChecked.Value)
+                currentProducts = currentProducts.OrderBy(p => p.ProductCost).ToList();
+
+            if (RButtonDesc.IsChecked.Value)
+                currentProducts = currentProducts.OrderByDescending(p => p.ProductCost).ToList();
+
+            RecordsShownText.Text = currentProducts.Count().ToString();
+
+            ProductListView.ItemsSource = currentProducts;
+        }
+
+        private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            UpdateProducts();
+        }
+
+        private void ComboDiscount_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateProducts();
+        }
+
+        private void RButtonAsc_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateProducts();
+        }
+
+        private void RButtonDesc_Checked(object sender, RoutedEventArgs e)
+        {
+            UpdateProducts();
         }
     }
 }
