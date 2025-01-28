@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="83193b65df4245f1abe41d6cabaa867e" Name="Diagram1">
+        <EntityTypeShape EntityType="Ignateva41Model.Order" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ignateva41Model.OrderProduct" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ignateva41Model.PickUpPoint" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ignateva41Model.Product" Width="1.5" PointX="3" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ignateva41Model.Role" Width="1.5" PointX="5.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Ignateva41Model.User" Width="1.5" PointX="8" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="Ignateva41Model.FK_Order_PickUpPoint" ManuallyRouted="false" />
+        <AssociationConnector Association="Ignateva41Model.FK_OrderProduct_Order" ManuallyRouted="false" />
+        <AssociationConnector Association="Ignateva41Model.FK__OrderProd__Produ__2E1BDC42" ManuallyRouted="false" />
+        <AssociationConnector Association="Ignateva41Model.FK__User__UserRole__267ABA7A" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

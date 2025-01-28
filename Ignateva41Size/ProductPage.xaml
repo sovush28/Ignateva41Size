@@ -6,9 +6,81 @@
       xmlns:local="clr-namespace:Ignateva41Size"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="ProductPage">
+      Title="ProductPage"
+      FontFamily="Comic Sans MS">
 
     <Grid>
-        <TextBlock Text="(список продуктов)" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <ListView Name="ProductListView">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="700"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Image Width="100" Grid.Column="0" Grid.RowSpan="4">
+                            <Image.Source>
+                                <Binding Path="ProductPhoto">
+                                    <Binding.TargetNullValue>
+                                        <ImageSource>
+                                            img/picture.png
+                                        </ImageSource>
+                                    </Binding.TargetNullValue>
+                                </Binding>
+                            </Image.Source>
+                        </Image>
+                        
+                        <TextBlock Text="{Binding ProductName}"
+                                   FontSize="16" FontWeight="Bold"
+                                   HorizontalAlignment="Left"
+                                   Grid.Row="0" Grid.Column="1"
+                                   Margin="5"/>
+
+                        <TextBlock Text="{Binding ProductDescription}"
+                                   FontSize="16" TextWrapping="Wrap"
+                                   HorizontalAlignment="Left"
+                                   Grid.Column="1" Grid.Row="1"
+                                   Margin="5"/>
+
+                        <TextBlock Text="{Binding ProductImporter}"
+                                   FontSize="16"
+                                   HorizontalAlignment="Left"
+                                   Grid.Column="1" Grid.Row="2"
+                                   Margin="5"/>
+
+                        <TextBlock Text="{Binding ProductCost, StringFormat={}{0} рублей}"
+                                   FontSize="16"
+                                    HorizontalAlignment="Left"
+                                   Grid.Column="1" Grid.Row="3"
+                                   Margin="5"/>
+
+                        <TextBlock Text="Скидка" FontSize="16"
+                                   Grid.Column="2" Grid.Row="0"
+                                   VerticalAlignment="Bottom"/>
+
+                        <TextBlock Text="{Binding ProductDiscountAmount, StringFormat={}{0} %}"
+                                   FontSize="30"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="2" Grid.Row="1"
+                                   Grid.RowSpan="3"/>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        
+        
     </Grid>
 </Page>

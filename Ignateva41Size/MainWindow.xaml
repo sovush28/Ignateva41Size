@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:Ignateva41Size"
         mc:Ignorable="d"
         Title="Игнатьева" MinHeight="450" MinWidth="800"
-        FontFamily="ComicSans MS"
-        Icon="img/icon.ico">
+        FontFamily="Comic Sans MS"
+        Icon="img/icon.ico"
+        Width="900">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="75"/>
+            <RowDefinition Height="100"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
@@ -19,7 +20,7 @@
 
         <Image Source="img/logo.png" HorizontalAlignment="Left"/>
 
-        <TextBlock Text="Заголовок" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <TextBlock Text="ООО 41 размер" FontSize="26" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
         <Frame Grid.Row="1" Name="MainFrame"
                ContentRendered="MainFrame_ContentRendered"

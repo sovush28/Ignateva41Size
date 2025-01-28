@@ -23,6 +23,9 @@ namespace Ignateva41Size
         public ProductPage()
         {
             InitializeComponent();
+
+            var currentProducts = Ignateva41Entities.GetContext().Product.ToList();
+            ProductListView.ItemsSource = currentProducts;
         }
     }
 }

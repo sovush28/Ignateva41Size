@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:Ignateva41Size"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LoginPage" FontFamily="ComicSans MS">
+      Title="LoginPage" FontFamily="Comic Sans MS">
     <Grid>
         <Button Content="Войти" FontSize="30" Height="40"
                 Click="Button_Click"/>
