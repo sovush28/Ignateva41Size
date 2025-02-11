@@ -20,9 +20,31 @@ namespace Ignateva41Size
     /// </summary>
     public partial class ProductPage : Page
     {
-        public ProductPage()
+        public ProductPage(User user)
         {
             InitializeComponent();
+
+            if (user!= null)
+            {
+                // в БД уже в каждом поле фамилии в конце пробел
+                FIOTextBlock.Text = user.UserSurname + user.UserName + " " + user.UserPatronymic;
+
+                switch (user.UserRole)
+                {
+                    case 1:
+                        RoleTextBlock.Text = "Клиент"; break;
+                    case 2:
+                        RoleTextBlock.Text = "Менеджер"; break;
+                    case 3:
+                        RoleTextBlock.Text = "Администратор"; break;
+                }
+            }
+            else
+            {
+                YouAuthAsText.Visibility = Visibility.Hidden;
+                FIOTextBlock.Visibility = Visibility.Hidden;
+                RoleTextBlock.Text = "Гость";
+            }
 
             var currentProducts = Ignateva41Entities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProducts;
