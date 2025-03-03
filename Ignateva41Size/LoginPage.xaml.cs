@@ -53,9 +53,6 @@ namespace Ignateva41Size
             {
                 MessageBox.Show("Неверная капча");
                 CaptchaTextBox.Text = "";
-                //LoginBtn.IsEnabled = false;
-                //Thread.Sleep(TimeSpan.FromSeconds(10));
-                //LoginBtn.IsEnabled = true;
                 DisableBtnFor10Seconds();
                 return;
             }
@@ -81,19 +78,11 @@ namespace Ignateva41Size
                 CaptchaTextBox.Text = "";
                 DisableBtnFor10Seconds();
 
-                //LoginBtn.Opacity = 0.5;
-                //LoginBtn.IsEnabled = false;
-                //Thread.Sleep(TimeSpan.FromSeconds(10));
-                //LoginBtn.IsEnabled = true;
-                //LoginBtn.Opacity = 1;
-
                 CaptchaStackP.Visibility = Visibility.Visible;
                 EnterCaptchaText.Visibility = Visibility.Visible;
             }
 
             GenerateCaptcha();
-            //
-            //
         }
 
         private void GuestLoginBtn_Click(object sender, RoutedEventArgs e)
@@ -119,8 +108,6 @@ namespace Ignateva41Size
 
             char ch4 = (char)rand.Next('A', 'Z' + 1);
             captchaWordFour.Text = ch4.ToString();
-
-
         }
 
         private async void DisableBtnFor10Seconds()

@@ -25,6 +25,14 @@ namespace Ignateva41Size
         public string PickUpPointCity { get; set; }
         public string PickUpPointStreet { get; set; }
         public string PickUpPointHome { get; set; }
+
+        public string PickUpPointAddress
+        {
+            get
+            {
+                return PickUpPointIndex + " " + PickUpPointCity + ", " + PickUpPointStreet + ", " + PickUpPointHome;
+            }
+        }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order { get; set; }

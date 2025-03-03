@@ -20,6 +20,9 @@ namespace Ignateva41Size
     /// </summary>
     public partial class ProductPage : Page
     {
+        List<OrderProduct> selectedOrderProducts = new List<OrderProduct>(); // ?
+        List<Product> selectedProducts = new List<Product>(); // ?
+
         public ProductPage(User user)
         {
             InitializeComponent();
@@ -50,6 +53,9 @@ namespace Ignateva41Size
             ProductListView.ItemsSource = currentProducts;
 
             ComboDiscount.SelectedIndex = 0;
+
+            OrderBtn.Visibility = Visibility.Hidden;
+
             UpdateProducts();
         }
 
@@ -113,6 +119,79 @@ namespace Ignateva41Size
         private void RButtonDesc_Checked(object sender, RoutedEventArgs e)
         {
             UpdateProducts();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (ProductListView.SelectedIndex >= 0)
+            {
+                var prod = ProductListView.SelectedItem as Product;
+                selectedProducts.Add(prod);
+
+                var newOrderProd = new OrderProduct
+                {
+                    OrderID = GenerateOrderID(), // Generate unique order ID
+                    ProductArticleNumber = prod.ProductArticleNumber,
+                    ProductCount = 1
+                };
+
+                var existingProduct = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
+                if (existingProduct != null)
+                {
+                    existingProduct.ProductCount++;
+                }
+                else
+                {
+                    selectedOrderProducts.Add(newOrderProd);
+                }
+
+                OrderBtn.Visibility = Visibility.Visible; // Show the "View Order" button
+                ProductListView.SelectedIndex = -1;
+            }
+
+
+            //if (ProductListView.SelectedIndex >= 0)
+            //{
+            //    var prod = ProductListView.SelectedItem as Product;
+            //    selectedProducts.Add(prod);
+
+            //    var newOrderProd = new OrderProduct();
+            //    newOrderProd.OrderID = newOrderID; // ?????????????????????????
+
+            //    newOrderProd.ProductArticleNumber = prod.ProductArticleNumber;
+            //    newOrderProd.ProductCount = 1;
+
+            //    var selOP = selectedOrderProducts.Where(p => Equals(p.ProductArticleNumber, prod.ProductArticleNumber));
+
+            //    if (selOP.Count() == 0)
+            //    {
+            //        selectedOrderProducts.Add(newOrderProd);
+            //    }
+            //    else
+            //    {
+            //        foreach(OrderProduct p in selectedOrderProducts)
+            //        {
+            //            if (p.ProductArticleNumber == prod.ProductArticleNumber)
+            //                p.ProductCount++;
+            //        }
+            //    }
+
+            //    OrderBtn.Visibility = Visibility.Visible;
+            //    ProductListView.SelectedIndex = -1;
+            //}
+        }
+
+        private int GenerateOrderID()
+        {
+            var maxOrderID = Ignateva41Entities.GetContext().Order.Max(o => o.OrderID);
+            return maxOrderID + 1;
+        }
+
+        private void OrderBtn_Click(object sender, RoutedEventArgs e)
+        {
+            selectedProducts = selectedProducts.Distinct().ToList();
+            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProducts, FIOTextBlock.Text);
+            orderWindow.ShowDialog();
         }
     }
 }

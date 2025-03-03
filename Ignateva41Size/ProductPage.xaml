@@ -15,6 +15,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="70"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Row="0" HorizontalAlignment="Left"
@@ -30,7 +31,6 @@
                 <TextBlock Name="RoleTextBlock" FontSize="16"/>
             </WrapPanel>
         </StackPanel>
-        
         
         <WrapPanel Grid.Row="1" VerticalAlignment="Center">
             <WrapPanel Margin="5" VerticalAlignment="Top" Width="130">
@@ -80,6 +80,11 @@
         </WrapPanel>
 
         <ListView Name="ProductListView" Grid.Row="2">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить к заказу" Click="MenuItem_Click"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -145,7 +150,12 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
-        
+
+        <Button Name="OrderBtn" Click="OrderBtn_Click"
+                Content="Текущий заказ" FontSize="18"
+                Width="200" Height="30"
+                Grid.Row="3"
+                HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
     </Grid>
 </Page>
