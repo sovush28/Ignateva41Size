@@ -15,14 +15,13 @@ namespace Ignateva41Size
     
     public partial class Ignateva41Entities : DbContext
     {
-
         private static Ignateva41Entities _context;
 
         public static Ignateva41Entities GetContext()
         {
             if (_context == null)
                 _context = new Ignateva41Entities();
-            
+
             return _context;
         }
 

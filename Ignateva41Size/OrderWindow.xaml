@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ignateva41Size"
         mc:Ignorable="d"
-        Title="Текущий заказ" Height="780" Width="870" FontFamily="Comic Sans MS">
+        Title="Текущий заказ" Height="800" Width="870" FontFamily="Comic Sans MS">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -25,41 +25,40 @@
 
         <TextBlock Text="Дата формирования заказа"
                    Grid.Row="0" Grid.Column="0"
-                   TextWrapping="Wrap" FontSize="22"
-                   Margin="5"/>
+                   TextWrapping="Wrap" FontSize="18"
+                   Margin="10"/>
 
         <DatePicker Name="OrderDatePicker" SelectedDateChanged="OrderDatePicker_SelectedDateChanged"
                     Grid.Row="0" Grid.Column="1"
                     HorizontalAlignment="Left"
                     Width="400"
-                    Height="35" FontSize="20"/>
-
+                    Height="35" FontSize="18"/>
 
         <TextBlock Text="Дата доставки заказа"
                    Grid.Row="1" Grid.Column="0"
-                   FontSize="22" Margin="5"/>
-
+                   FontSize="18" Margin="10"/>
+ 
         <DatePicker Name="DeliveryDatePicker"
                     Grid.Row="1" Grid.Column="1"
-                    Height="35" FontSize="20"
+                    Height="35" FontSize="18"
                     Width="400"
                     HorizontalAlignment="Left"/>
 
         <TextBlock Text="ФИО клиента"
                    Grid.Row="2" Grid.Column="0"
-                   FontSize="22" Margin="5"/>
+                   FontSize="18" Margin="10"/>
 
         <TextBlock Name="FIOTextBlock"
                    Grid.Row="2" Grid.Column="1"
-                   FontSize="22" VerticalAlignment="Center"/>
+                   FontSize="18" VerticalAlignment="Center"/>
 
         <TextBlock Text="Номер заказа"
                    Grid.Row="3" Grid.Column="0"
-                   FontSize="22" Margin="5"/>
+                   FontSize="18" Margin="10"/>
 
         <TextBlock Name="OrderNumberTB"
                    Grid.Row="3" Grid.Column="1"
-                   FontSize="22" VerticalAlignment="Center"/>
+                   FontSize="18" VerticalAlignment="Center"/>
 
         <ListView Name="ShoeListView" Grid.Row="4" Grid.ColumnSpan="2" SelectionChanged="ShoeListView_SelectionChanged">
             <ListView.ItemTemplate>
@@ -146,12 +145,12 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <TextBlock Text="Пункт выдачи" FontSize="22"
+        <TextBlock Text="Пункт выдачи" FontSize="18"
                    Grid.Row="5" Grid.Column="0"
-                   Margin="5"/>
+                   Margin="10"/>
 
         <ComboBox Name="PickupPointCombo"
-            Grid.Row="5" Grid.Column="1"
+                  Grid.Row="5" Grid.Column="1"
                   Width="550" Height="35"
                   HorizontalAlignment="Left">
             <ComboBox.ItemTemplate>
@@ -161,23 +160,23 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <TextBlock Text="Стоимость заказа   (без скидки):" FontSize="22"
+        <TextBlock Text="Стоимость заказа без скидки:" FontSize="18"
                    Grid.Row="6" Grid.Column="0"
-                   Margin="5"
+                   Margin="10"
                    TextWrapping="Wrap"/>
 
-        <TextBlock Name="OverallOrderCostTB" FontSize="22"
+        <TextBlock Name="OverallOrderCostTB" FontSize="18"
                    VerticalAlignment="Center"
-                   Grid.Row="6" Grid.Column="1" Margin="10"/>
+                   Grid.Row="6" Grid.Column="1"/>
 
-        <TextBlock Text="Итого к оплате       (со скидкой):"
+        <TextBlock Text="Итого к оплате со скидкой:"
                    Grid.Row="7" Grid.Column="0"
-                   Margin="5" TextWrapping="Wrap"
-                   FontSize="22"/>
+                   Margin="10" TextWrapping="Wrap"
+                   FontSize="18"/>
 
-        <TextBlock Name="TotalWDiscTB" FontSize="22"
+        <TextBlock Name="TotalWDiscTB" FontSize="18"
                    VerticalAlignment="Center"
-                   Grid.Row="7" Grid.Column="1" Margin="10"/>
+                   Grid.Row="7" Grid.Column="1"/>
 
         <Button Content="Сохранить" Name="SaveBtn"
                 Grid.Row="8" HorizontalAlignment="Center"

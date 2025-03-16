@@ -23,9 +23,12 @@ namespace Ignateva41Size
         List<OrderProduct> selectedOrderProducts = new List<OrderProduct>(); // ?
         List<Product> selectedProducts = new List<Product>(); // ?
 
+        private User _currentUser;
+
         public ProductPage(User user)
         {
             InitializeComponent();
+            _currentUser = user;
 
             if (user!= null)
             {
@@ -174,8 +177,34 @@ namespace Ignateva41Size
         private void OrderBtn_Click(object sender, RoutedEventArgs e)
         {
             selectedProducts = selectedProducts.Distinct().ToList();
-            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProducts, FIOTextBlock.Text);
-            orderWindow.ShowDialog();
+
+            //инициализация Product.Quantity
+            foreach(var product in selectedProducts)
+            {
+                var orderProduct = selectedOrderProducts.FirstOrDefault(op => op.ProductArticleNumber == product.ProductArticleNumber);
+
+                if (orderProduct != null)
+                {
+                    product.Quantity = orderProduct.ProductCount;
+                }
+                else
+                {
+                    product.Quantity = 1;
+                }
+            }
+
+            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProducts, _currentUser);
+            bool? orderResult = orderWindow.ShowDialog();
+
+            //если заказ успешно сохранен
+            if (orderResult == true)
+            {
+                selectedProducts.Clear();
+                selectedOrderProducts.Clear();
+                ProductListView.Items.Refresh();
+            }
+
+            OrderBtn.Visibility = selectedProducts.Any() ? Visibility.Visible : Visibility.Hidden;
         }
     }
 }

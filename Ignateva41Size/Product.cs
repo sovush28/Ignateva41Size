@@ -40,12 +40,13 @@ namespace Ignateva41Size
                 if (ProductPhoto == null)
                     return null;
 
-                else 
+                else
                     return "products/" + ProductPhoto;
             }
         }
 
         public int Quantity { get; set; }
+
 
         public string ProductStatus { get; set; }
     

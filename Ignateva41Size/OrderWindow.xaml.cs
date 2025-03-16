@@ -20,7 +20,6 @@ namespace Ignateva41Size
 
     public partial class OrderWindow : Window
     {
-        ///////////////////////////////////////// 257
         List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
         List<Product> selectedProducts = new List<Product>();
         private Order currentOrder = new Order();
@@ -28,9 +27,10 @@ namespace Ignateva41Size
 
         private User _currentUser;
 
-        public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, string FIO)
+        public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, User user)
         {
             InitializeComponent();
+            _currentUser = user;
 
             DeleteBtn.Visibility = Visibility.Hidden;
             CancelSelectionBtn.Visibility = Visibility.Hidden;
@@ -38,13 +38,13 @@ namespace Ignateva41Size
             var currentPickUps = Ignateva41Entities.GetContext().PickUpPoint.ToList();
             PickupPointCombo.ItemsSource = currentPickUps;
 
-            if (FIO == "" || FIO == null)
+            if (_currentUser == null)
             {
                 FIOTextBlock.Text = "Гость";
             }
             else
             {
-                FIOTextBlock.Text = FIO;
+                FIOTextBlock.Text = _currentUser.UserSurname + _currentUser.UserName + " " + _currentUser.UserPatronymic;
             }
 
             foreach (var prod in selectedProducts)
@@ -148,22 +148,57 @@ namespace Ignateva41Size
         private void BtnPlus_Click(object sender, RoutedEventArgs e)
         {
             var prod = (sender as Button).DataContext as Product;
-            prod.Quantity++;
+            //prod.Quantity++;
 
             var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
             if (selectedOP != null)
             {
                 selectedOP.ProductCount++;
+                prod.Quantity = selectedOP.ProductCount;
+                SetDeliveryDate();
+                UpdateTotalCost();
+                ShoeListView.Items.Refresh();
             }
-
-            SetDeliveryDate();
-            UpdateTotalCost();
-            ShoeListView.Items.Refresh();
         }
 
         private void BtnMinus_Click(object sender, RoutedEventArgs e)
         {
             var prod = (sender as Button).DataContext as Product;
+            
+            /*
+            var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
+            if (selectedOP != null)
+            {
+                if (selectedOP.ProductCount > 1)
+                {
+                    selectedOP.ProductCount--;
+                    prod.Quantity = selectedOP.ProductCount; // Синхронизируем Quantity
+                    SetDeliveryDate();
+                    CalculateTotalAndDiscount();
+                    ProductOrderListView.Items.Refresh();
+                }
+                else
+                {
+                    // Удаляем OrderProduct из списка
+                    selectedOrderProducts.Remove(selectedOP);
+
+                    // Находим Product в selectedProducts по артикулу (чтобы избежать проблем с ссылками)
+                    var productToRemove = selectedProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
+                    if (productToRemove != null)
+                    {
+                        selectedProducts.Remove(productToRemove);
+                    }
+
+                    // Обновляем интерфейс
+                    ProductOrderListView.Items.Refresh();
+                    // Перепривязываем данные, чтобы обновить интерфейс
+                    ProductOrderListView.ItemsSource = null;
+                    ProductOrderListView.ItemsSource = selectedProducts;
+                    SetDeliveryDate();
+                    CalculateTotalAndDiscount();
+                    ProductOrderListView.Items.Refresh();
+                }
+                */
 
             if (prod.Quantity > 1)
             {
@@ -254,15 +289,32 @@ namespace Ignateva41Size
 
             if (_currentUser == null)
             {
-                currentOrder.OrderClient = "NULL";
+                currentOrder.OrderClientID = null;
             }
             else
             {
-                //currentOrder.OrderClient = _currentUser.UserID;
+                currentOrder.OrderClientID = _currentUser.UserID;
             }
 
             try
             {
+                //генерация orderCode
+
+                Random random = new Random();
+                int newOrderCode;
+                do
+                {
+                    newOrderCode = random.Next(100, 1000);
+                }
+                while (Ignateva41Entities.GetContext().Order.Any(o => o.OrderCode == newOrderCode));
+
+                currentOrder.OrderPickupPoint = PickupPointCombo.SelectedIndex + 1;
+                currentOrder.OrderDate = OrderDatePicker.SelectedDate.Value;
+                currentOrder.OrderDeliveryDate = DeliveryDatePicker.SelectedDate.Value;
+                currentOrder.OrderStatus = "Новый";
+                currentOrder.OrderCode = newOrderCode;
+
+                /*
                 var user = Ignateva41Entities.GetContext().User
                     .FirstOrDefault(u => u.UserSurname + " " + u.UserName + " " + u.UserPatronymic == FIOTextBlock.Text);
 
@@ -276,7 +328,7 @@ namespace Ignateva41Size
                 var newOrder = new Order
                 {
                     //OrderID = Convert.ToInt32(OrderNumberTB.Text),
-                    OrderClient = newUserID.ToString(),
+                    //OrderClientID = newUserID.ToString(),
                     OrderPickupPoint = (PickupPointCombo.SelectedItem as PickUpPoint).PickUpPointID,
                     OrderStatus = "Новый",
                     OrderDate = OrderDatePicker.SelectedDate.Value,
@@ -284,18 +336,24 @@ namespace Ignateva41Size
                     OrderCode = newOrderCode,
                     TotalCost = decimal.Parse(OverallOrderCostTB.Text.Replace("₽", "").Trim())
                 };
+                */
 
-                Ignateva41Entities.GetContext().Order.Add(newOrder);
+                Ignateva41Entities.GetContext().Order.Add(currentOrder);
                 Ignateva41Entities.GetContext().SaveChanges();
+
 
                 foreach (var orderProduct in selectedOrderProducts)
                 {
-                    orderProduct.OrderID = newOrder.OrderID;
+                    orderProduct.OrderID = currentOrder.OrderID;
                     Ignateva41Entities.GetContext().OrderProduct.Add(orderProduct);
                 }
 
                 Ignateva41Entities.GetContext().SaveChanges();
-                MessageBox.Show("Заказ успешно сохранен!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                MessageBox.Show("Заказ успешно сохранен!\nКод заказа: " + currentOrder.OrderCode, "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                this.DialogResult = true;
+                Close();
             }
             catch (Exception ex)
             {
@@ -355,257 +413,6 @@ namespace Ignateva41Size
         {
             SetDeliveryDate();
         }
+
     }
 }
-
-
-
-    /*
-    public partial class OrderWindow : Window
-    {
-        List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
-        List<Product> selectedProducts = new List<Product>();
-        private Order currentOrder = new Order();
-        private OrderProduct currentOrderProduct = new OrderProduct();
-
-        public OrderWindow(List<OrderProduct> selectedOrderProducts, List<Product> selectedProducts, string FIO)
-        {
-            InitializeComponent();
-
-            DeleteBtn.Visibility = Visibility.Hidden;
-            CancelSelectionBtn.Visibility = Visibility.Hidden;
-
-            var currentPickUps = Ignateva41Entities.GetContext().PickUpPoint.ToList();
-            PickupPointCombo.ItemsSource = currentPickUps;
-
-            FIOTextBlock.Text = FIO;
-            if (FIOTextBlock.Text == null)
-                FIOTextBlock.Text = "Гость";
-
-            foreach (var prod in selectedProducts)
-            {
-                prod.Quantity = selectedOrderProducts.FirstOrDefault(op => op.ProductArticleNumber == prod.ProductArticleNumber)?.ProductCount ?? 1;
-            }
-
-            ShoeListView.ItemsSource = selectedProducts;
-
-            GenerateOrderNumber();
-
-            SetDeliveryDate();
-            UpdateTotalCost();
-
-        }
-
-        private void UpdateTotalCost()
-        {
-            decimal totalCost = 0;
-
-            foreach (var product in selectedProducts)
-            {
-                var orderProduct = selectedOrderProducts.FirstOrDefault(op => op.ProductArticleNumber == product.ProductArticleNumber);
-                if (orderProduct != null)
-                {
-                    totalCost += product.ProductCost * orderProduct.ProductCount;
-                }
-            }
-
-            OverallOrderCostTB.Text = totalCost.ToString() + " руб.";
-        }
-
-        private void GenerateOrderNumber()
-        {
-            try
-            {
-                // Retrieve the maximum OrderID from the database
-                int maxOrderID = Ignateva41Entities.GetContext().Order.Max(o => o.OrderID);
-                int newOrderID = maxOrderID + 1;
-
-                // Retrieve the maximum OrderCode from the database
-                int? maxOrderCode = Ignateva41Entities.GetContext().Order.Max(o => (int?)o.OrderCode);
-                int newOrderCode = maxOrderCode.HasValue ? maxOrderCode.Value + 1 : 1;
-
-                // Set the generated values to the respective fields
-                OrderNumberTB.Text = newOrderID.ToString();
-                currentOrder.OrderCode = newOrderCode; // Pre-fill the OrderCode for saving
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Ошибка при генерации номера заказа: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void BtnPlus_Click(object sender, RoutedEventArgs e)
-        {
-            var prod = (sender as Button).DataContext as Product;
-            prod.Quantity++;
-
-            var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
-            if (selectedOP != null)
-            {
-                selectedOP.ProductCount++;
-            }
-
-            SetDeliveryDate();
-            ShoeListView.Items.Refresh();
-            UpdateTotalCost();
-
-        }
-
-        private void BtnMinus_Click(object sender, RoutedEventArgs e)
-        {
-            var prod = (sender as Button).DataContext as Product;
-
-            if (prod.Quantity > 1)
-            {
-                prod.Quantity--;
-
-                var selectedOP = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
-                if (selectedOP != null)
-                {
-                    selectedOP.ProductCount--;
-                }
-            }
-            else
-            {
-                if (selectedProducts.Count == 1)
-                {
-                    if (MessageBox.Show("Отменить заказ?", "Внимание!",
-                    MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        this.Close();
-                    }
-                    else
-                    {
-                        return;
-                    }
-                }
-
-                selectedProducts.Remove(prod);
-                selectedOrderProducts.RemoveAll(op => op.ProductArticleNumber == prod.ProductArticleNumber);
-            }
-
-            SetDeliveryDate();
-            ShoeListView.Items.Refresh();
-            UpdateTotalCost();
-
-
-        }
-
-        private void SetDeliveryDate()
-        {
-            bool areEnoughInStock = true;
-
-            foreach(Product p in selectedProducts)
-            {
-                if (p.ProductQuantityInStock < 3)
-                {
-                    areEnoughInStock = false;
-                    //break;
-                }
-
-            }
-
-            int deliveryDays = 3;
-
-            if (!areEnoughInStock)
-            {
-                deliveryDays = 6;
-            }
-
-            if (OrderDatePicker.Text != "")
-                DeliveryDatePicker.Text = OrderDatePicker.SelectedDate.Value.AddDays(deliveryDays).ToString();
-        }
-
-        private void SaveBtn_Click(object sender, RoutedEventArgs e)
-        {
-            StringBuilder errors = new StringBuilder();
-
-            if (PickupPointCombo.SelectedIndex == -1)
-            {
-                errors.AppendLine("Выберите пункт выдачи.");
-            }
-            if (selectedProducts.Count == 0)
-            {
-                errors.AppendLine("Добавьте хотя бы один товар в заказ.");
-            }
-
-            // Display validation errors if any
-            if (errors.Length > 0)
-            {
-                MessageBox.Show(errors.ToString(), "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            try
-            {
-                var user = Ignateva41Entities.GetContext().User
-                    .FirstOrDefault(u => u.UserSurname + u.UserName + " " + u.UserPatronymic == FIOTextBlock.Text);
-
-                //if (user == null)
-                //{
-                //    MessageBox.Show("Клиент с указанным ФИО не найден.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                //    return;
-                //}
-
-                int? newUserID = user.UserID;
-                if (FIOTextBlock.Text == "Гость")
-                    newUserID = null;
-
-                var newOrder = new Order
-                {
-                    OrderID = Convert.ToInt32(OrderNumberTB.Text),
-                    OrderClient = newUserID==null ? "NULL" : newUserID.ToString(), //??
-                    OrderPickupPoint = (PickupPointCombo.SelectedItem as PickUpPoint).PickUpPointID,
-                    OrderStatus = "Новый",
-                    OrderDate = Convert.ToDateTime(OrderDatePicker.Text),
-                    OrderDeliveryDate = Convert.ToDateTime(DeliveryDatePicker.Text),
-                    OrderCode = currentOrder.OrderCode
-                };
-
-                // Add the order to the context
-                Ignateva41Entities.GetContext().Order.Add(newOrder);
-
-                // Add order products to the context
-                foreach (var orderProduct in selectedOrderProducts)
-                {
-                    orderProduct.OrderID = newOrder.OrderID; // Link each product to the current order
-                    Ignateva41Entities.GetContext().OrderProduct.Add(orderProduct);
-                }
-
-                Ignateva41Entities.GetContext().SaveChanges();
-                MessageBox.Show("Заказ успешно сохранен");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
-
-        }
-
-        private void DeleteBtn_Click(object sender, RoutedEventArgs e)
-        {
-            //удаление продукта из заказа
-        }
-
-        private void ShoeListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ShoeListView.SelectedItems.Count > 0)
-            {
-                DeleteBtn.Visibility = Visibility.Visible;
-                CancelSelectionBtn.Visibility = Visibility.Visible;
-                SaveBtn.Visibility = Visibility.Hidden;
-            }
-        }
-
-        private void CancelSelectionBtn_Click(object sender, RoutedEventArgs e)
-        {
-            ShoeListView.SelectedItems.Clear();
-
-            SaveBtn.Visibility = Visibility.Visible;
-            DeleteBtn.Visibility = Visibility.Hidden;
-            CancelSelectionBtn.Visibility = Visibility.Hidden;
-
-        }
-    }
-}
-    */
