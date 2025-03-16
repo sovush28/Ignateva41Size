@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Ignateva41Size"
         mc:Ignorable="d"
-        Title="OrderWindow" Height="680" Width="870" FontFamily="Comic Sans MS">
+        Title="Текущий заказ" Height="780" Width="870" FontFamily="Comic Sans MS">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -13,6 +13,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="300"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -27,11 +28,12 @@
                    TextWrapping="Wrap" FontSize="22"
                    Margin="5"/>
 
-        <DatePicker Name="OrderDatePicker"
+        <DatePicker Name="OrderDatePicker" SelectedDateChanged="OrderDatePicker_SelectedDateChanged"
                     Grid.Row="0" Grid.Column="1"
                     HorizontalAlignment="Left"
                     Width="400"
                     Height="35" FontSize="20"/>
+
 
         <TextBlock Text="Дата доставки заказа"
                    Grid.Row="1" Grid.Column="0"
@@ -146,7 +148,7 @@
 
         <TextBlock Text="Пункт выдачи" FontSize="22"
                    Grid.Row="5" Grid.Column="0"
-                   Margin="10"/>
+                   Margin="5"/>
 
         <ComboBox Name="PickupPointCombo"
             Grid.Row="5" Grid.Column="1"
@@ -159,30 +161,41 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
 
-        <TextBlock Text="Итого к оплате" FontSize="22"
+        <TextBlock Text="Стоимость заказа   (без скидки):" FontSize="22"
                    Grid.Row="6" Grid.Column="0"
-                   Margin="5"/>
+                   Margin="5"
+                   TextWrapping="Wrap"/>
 
         <TextBlock Name="OverallOrderCostTB" FontSize="22"
                    VerticalAlignment="Center"
-                   Grid.Row="6" Grid.Column="1"/>
+                   Grid.Row="6" Grid.Column="1" Margin="10"/>
+
+        <TextBlock Text="Итого к оплате       (со скидкой):"
+                   Grid.Row="7" Grid.Column="0"
+                   Margin="5" TextWrapping="Wrap"
+                   FontSize="22"/>
+
+        <TextBlock Name="TotalWDiscTB" FontSize="22"
+                   VerticalAlignment="Center"
+                   Grid.Row="7" Grid.Column="1" Margin="10"/>
 
         <Button Content="Сохранить" Name="SaveBtn"
-                Grid.Row="7" HorizontalAlignment="Center"
+                Grid.Row="8" HorizontalAlignment="Center"
                 Click="SaveBtn_Click"
                 Grid.ColumnSpan="2"
                 Margin="20"/>
 
         <Button Content="Удалить продукт" Name="DeleteBtn"
-                Grid.Row="7" HorizontalAlignment="Right"
+                Grid.Row="8" HorizontalAlignment="Right"
                 Grid.Column="1" Margin="20"
                 Click="DeleteBtn_Click"/>
 
         <Button Content="Отменить выделение" Name="CancelSelectionBtn"
-                Grid.Row="7" Grid.ColumnSpan="2"
+                Grid.Row="8" Grid.ColumnSpan="2"
                 HorizontalAlignment="Center"
                 Margin="20"
-                Click="CancelSelectionBtn_Click"/>
+                Click="CancelSelectionBtn_Click"
+                Width="250"/>
 
     </Grid>
 </Window>

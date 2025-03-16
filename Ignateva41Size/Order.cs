@@ -19,7 +19,7 @@ namespace Ignateva41Size
         {
             this.OrderProduct = new HashSet<OrderProduct>();
         }
-    
+
         public int OrderID { get; set; }
         public System.DateTime OrderDate { get; set; }
         public System.DateTime OrderDeliveryDate { get; set; }
@@ -27,6 +27,8 @@ namespace Ignateva41Size
         public string OrderClient { get; set; }
         public int OrderCode { get; set; }
         public string OrderStatus { get; set; }
+
+        public decimal TotalCost {  get; set; }
     
         public virtual PickUpPoint PickUpPoint { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

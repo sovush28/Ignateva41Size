@@ -126,59 +126,43 @@ namespace Ignateva41Size
             if (ProductListView.SelectedIndex >= 0)
             {
                 var prod = ProductListView.SelectedItem as Product;
-                selectedProducts.Add(prod);
 
-                var newOrderProd = new OrderProduct
-                {
-                    OrderID = GenerateOrderID(), // Generate unique order ID
-                    ProductArticleNumber = prod.ProductArticleNumber,
-                    ProductCount = 1
-                };
-
-                var existingProduct = selectedOrderProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
+                // Проверяем, есть ли товар уже в списке selectedProducts
+                var existingProduct = selectedProducts.FirstOrDefault(p => p.ProductArticleNumber == prod.ProductArticleNumber);
                 if (existingProduct != null)
                 {
-                    existingProduct.ProductCount++;
+                    // Если товар уже есть в списке, увеличиваем его количество
+                    existingProduct.Quantity++;
                 }
                 else
                 {
+                    // Если товара нет в списке, добавляем его с количеством 1
+                    prod.Quantity = 1; // Устанавливаем начальное количество
+                    selectedProducts.Add(prod);
+                }
+
+                // Проверяем, есть ли товар уже в списке selectedOrderProducts
+                var existingOrderProduct = selectedOrderProducts.FirstOrDefault(op => op.ProductArticleNumber == prod.ProductArticleNumber);
+                if (existingOrderProduct != null)
+                {
+                    // Если товар уже есть в списке, увеличиваем его количество
+                    existingOrderProduct.ProductCount++;
+                }
+                else
+                {
+                    // Если товара нет в списке, добавляем его с количеством 1
+                    var newOrderProd = new OrderProduct
+                    {
+                        OrderID = GenerateOrderID(), // Генерируем уникальный ID заказа
+                        ProductArticleNumber = prod.ProductArticleNumber,
+                        ProductCount = 1
+                    };
                     selectedOrderProducts.Add(newOrderProd);
                 }
 
-                OrderBtn.Visibility = Visibility.Visible; // Show the "View Order" button
-                ProductListView.SelectedIndex = -1;
+                // Показываем кнопку "View Order"
+                OrderBtn.Visibility = Visibility.Visible;
             }
-
-
-            //if (ProductListView.SelectedIndex >= 0)
-            //{
-            //    var prod = ProductListView.SelectedItem as Product;
-            //    selectedProducts.Add(prod);
-
-            //    var newOrderProd = new OrderProduct();
-            //    newOrderProd.OrderID = newOrderID; // ?????????????????????????
-
-            //    newOrderProd.ProductArticleNumber = prod.ProductArticleNumber;
-            //    newOrderProd.ProductCount = 1;
-
-            //    var selOP = selectedOrderProducts.Where(p => Equals(p.ProductArticleNumber, prod.ProductArticleNumber));
-
-            //    if (selOP.Count() == 0)
-            //    {
-            //        selectedOrderProducts.Add(newOrderProd);
-            //    }
-            //    else
-            //    {
-            //        foreach(OrderProduct p in selectedOrderProducts)
-            //        {
-            //            if (p.ProductArticleNumber == prod.ProductArticleNumber)
-            //                p.ProductCount++;
-            //        }
-            //    }
-
-            //    OrderBtn.Visibility = Visibility.Visible;
-            //    ProductListView.SelectedIndex = -1;
-            //}
         }
 
         private int GenerateOrderID()
