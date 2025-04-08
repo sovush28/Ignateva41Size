@@ -275,6 +275,8 @@ namespace Ignateva41Size
             {
                 errors.AppendLine("Выберите дату заказа.");
             }
+            else if (OrderDatePicker.SelectedDate > DateTime.Now.Date)
+                errors.AppendLine("Выбрана некорректная дата заказа.");
 
             if (selectedProducts.Count == 0)
             {
